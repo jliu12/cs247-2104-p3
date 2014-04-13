@@ -21,7 +21,8 @@
     });
     $("#submission").droppable({
       drop: function(event, ui) {
-        alert("DROPPED!");
+        //$(ui.draggable).draggable("option", "revert", false);
+        $(ui.draggable).remove();
       }
     });
   });
@@ -216,7 +217,17 @@
         video.pause();
       });
 
-      $(video).draggable({ revert: true });
+      $(video).draggable({ 
+        revert: true,
+        start: function() {
+          $(this).width(60);
+          $(this).height(45);
+        }, 
+        stop: function() {
+          $(this).width(120);
+          $(this).height(90);
+        }
+      });
 
       // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
       // var video = document.createElement("img");
