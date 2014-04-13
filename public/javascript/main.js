@@ -3,15 +3,31 @@
 
 (function() {
 
-  var cur_video_blob = null;
+  var cur_video_blobs = [];
+  var copy_video_blobs = [];
   var fb_instance;
   var curtainClosed = true;
   var vid_counter = 0;
   var num_vids_entered = 0;
+  var max_videos = 8;
 
   $(document).ready(function(){
     connect_to_chat_firebase();
     connect_webcam();
+    $("#filmstrip_button").click(function() {
+      if ($(this).hasClass("down")) {
+        hide_filmstrip();
+      } else {
+        show_filmstrip();
+      }
+      $(this).toggleClass("down");
+    });
+    $("#submission").droppable({
+      drop: function(event, ui) {
+        //$(ui.draggable).draggable("option", "revert", false);
+        $(ui.draggable).remove();
+      }
+    });
   });
 
   function init_curtains(curtain_wrapper, last_msg, video) {
@@ -87,7 +103,7 @@
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
         if(has_emotions($(this).val())){
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
+          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blobs, c: my_color});
         }else{
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
@@ -213,13 +229,16 @@
 
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
-            cur_video_blob = b64_data;
+            cur_video_blobs.push(b64_data);
+            if (cur_video_blobs.length > max_videos) {
+              cur_video_blobs.shift();
+            }
           });
       };
       setInterval( function() {
         mediaRecorder.stop();
-        mediaRecorder.start(3000);
-      }, 3000 );
+        mediaRecorder.start(2000);
+      }, 2000 );
       console.log("connect to media stream!");
     }
 
@@ -232,14 +251,69 @@
     navigator.getUserMedia(mediaConstraints, onMediaSuccess, onMediaError);
   }
 
+  function hide_filmstrip() {
+    $("#filmstrip").html("");
+  }
+
+  function show_filmstrip() {
+    copy_video_blobs = cur_video_blobs.slice();
+    for (var i = 0; i < copy_video_blobs.length; i ++) {
+      append_video(copy_video_blobs[i]);
+    }
+  }
+
+  function append_video(b64_data) {
+      var video = document.createElement("video");
+      
+      video.autoplay = false;
+      video.controls = false; // optional
+      video.loop = true;
+      video.width = 120;
+      video.height = 90;
+      video.className = "filmstrip_vid";
+
+      var source = document.createElement("source");
+      source.src =  URL.createObjectURL(base64_to_blob(b64_data));
+      source.type =  "video/webm";
+
+      video.appendChild(source);
+
+      $(video).mouseover(function() {
+        video.play();
+      });
+
+      $(video).mouseout(function() {
+        video.pause();
+      });
+
+      $(video).draggable({ 
+        revert: true,
+        start: function() {
+          $(this).width(60);
+          $(this).height(45);
+        }, 
+        stop: function() {
+          $(this).width(120);
+          $(this).height(90);
+        }
+      });
+
+      // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
+      // var video = document.createElement("img");
+      // video.src = URL.createObjectURL(base64_to_blob(data.v));
+
+      var film_strip = document.getElementById('filmstrip');
+      film_strip.appendChild(video);
+  }
+
   // check to see if a message qualifies to be replaced with video.
   var has_emotions = function(msg){
-    var options = ["lol",":)",":("];
-    for(var i=0;i<options.length;i++){
-      if(msg.indexOf(options[i])!= -1){
-        return true;
-      }
-    }
+    // var options = ["lol",":)",":("];
+    // for(var i=0;i<options.length;i++){
+    //   if(msg.indexOf(options[i])!= -1){
+    //     return true;
+    //   }
+    // }
     return false;
   }
 
