@@ -5,11 +5,12 @@
 
   var cur_video_blobs = [];
   var copy_video_blobs = [];
+  var send_video_blobs = [];
   var fb_instance;
-  var curtainClosed = true;
   var vid_counter = 0;
   var num_vids_entered = 0;
   var max_videos = 8;
+  var numbers = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
 
   $(document).ready(function(){
     connect_to_chat_firebase();
@@ -25,7 +26,12 @@
     $("#submission").droppable({
       drop: function(event, ui) {
         //$(ui.draggable).draggable("option", "revert", false);
-        $(ui.draggable).remove();
+        var id = $(ui.draggable).attr("id").split("_")[1];
+        //$(ui.draggable).remove();
+        send_video_blobs.push(copy_video_blobs[id]);
+        var value = $("#type_box").val();
+        value += " " + numbers[id] + " ";
+        $("#type_box").val(value);
       }
     });
   });
@@ -50,16 +56,19 @@
     content.appendChild(video);
 
 
-      $(curtain_wrapper).click(function(){
-      if (curtainClosed) {
+    $(curtain_wrapper).click(function(){
+      console.log("CLICK!");
+      if (!$(this).hasClass("open")) {
+        $(this).toggleClass("open");
+        console.log("OPENING");
         $(this).children('.description').animate({'left': -1*$(this).width()});
         $(this).children('img.curtain').animate({ width: 8 },{duration: 800});
         $(this).children('.content').fadeIn(800);
-        curtainClosed = false;
       } else {
-        curtainClosed = true;
+        console.log("CLOSING");
         $(this).children('img.curtain').animate({ width: 57 },{duration: 800});
         $(this).children('.content').fadeIn(800);
+        $(this).toggleClass("open");
       }
     });
   }
@@ -103,12 +112,14 @@
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
         if(has_emotions($(this).val())){
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blobs, c: my_color});
+          console.log("HAS EMOTION");
+          fb_instance_stream.push({m:username+": " +$(this).val(), v:send_video_blobs, c: my_color});
         }else{
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
         $(this).val("");
         scroll_to_bottom(0);
+        send_video_blobs = [];
       }
     });
 
@@ -121,28 +132,31 @@
     $("#conversation").append("<div class='msg' style='color:"+data.c+"'></div>");
     var msgs = $(".msg");
     var last_msg = msgs[msgs.length-1];
-
+    console.log(data.v);
     if(data.v){
-      display_video(data.v, last_msg);
       //var tokens = data.m.split(video_char);
       // for video element
-      var video = document.createElement("video");
-      video.autoplay = true;
-      video.controls = false; // optional
-      video.loop = true;
-      video.width = 120;
+      var message = data.m;
+      var vid_index = 0;
+      var msg_to_send = "";
 
-      var source = document.createElement("source");
-      source.src =  URL.createObjectURL(base64_to_blob(data.v));
-      source.type =  "video/webm";
+      for (var i = 0; i < message.length; i++) {
+        var curr_char = message[i];
+        console.log(curr_char);
+        if (numbers.indexOf(curr_char) != -1) {
+          console.log("TRUE!");
+          $(last_msg).append("<span>" + msg_to_send + "</span>");
+          msg_to_send = "";
 
-      video.appendChild(source);
-
-      // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
-      // var video = document.createElement("img");
-      // video.src = URL.createObjectURL(base64_to_blob(data.v));
-
-      //document.getElementById("conversation").appendChild(video);
+          display_video(data.v[vid_index], last_msg);
+          vid_index++;
+        } else {
+          msg_to_send += curr_char;
+        }
+      }
+      $(last_msg).append("<span>" + msg_to_send + "</span>");
+    } else {
+      $(last_msg).append(data.m);
     }
   }
 
@@ -258,11 +272,11 @@
   function show_filmstrip() {
     copy_video_blobs = cur_video_blobs.slice();
     for (var i = 0; i < copy_video_blobs.length; i ++) {
-      append_video(copy_video_blobs[i]);
+      append_video(copy_video_blobs[i], i);
     }
   }
 
-  function append_video(b64_data) {
+  function append_video(b64_data, index) {
       var video = document.createElement("video");
       
       video.autoplay = false;
@@ -271,6 +285,7 @@
       video.width = 120;
       video.height = 90;
       video.className = "filmstrip_vid";
+      video.setAttribute("id", "vid_" + index);
 
       var source = document.createElement("source");
       source.src =  URL.createObjectURL(base64_to_blob(b64_data));
@@ -287,7 +302,7 @@
       });
 
       $(video).draggable({ 
-        revert: true,
+        revert: true/*,
         start: function() {
           $(this).width(60);
           $(this).height(45);
@@ -295,7 +310,7 @@
         stop: function() {
           $(this).width(120);
           $(this).height(90);
-        }
+        }*/
       });
 
       // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
@@ -308,12 +323,11 @@
 
   // check to see if a message qualifies to be replaced with video.
   var has_emotions = function(msg){
-    // var options = ["lol",":)",":("];
-    // for(var i=0;i<options.length;i++){
-    //   if(msg.indexOf(options[i])!= -1){
-    //     return true;
-    //   }
-    // }
+    for(var i=0;i<numbers.length;i++){
+      if(msg.indexOf(numbers[i])!= -1){
+        return true;
+      }
+    }
     return false;
   }
 

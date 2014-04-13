@@ -58,6 +58,9 @@ a {
   overflow-y: scroll;
   height: 100%;
 }
+#type_box {
+  height: 100px;
+}
 #submission {
   position: fixed;
   bottom: 120px;
@@ -106,6 +109,7 @@ img.curtainRight {
   overflow: hidden;
   color: white;
   background: black;
+  display: inline-block;
 }
 .content {
   position: relative;
