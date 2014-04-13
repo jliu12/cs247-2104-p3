@@ -53,3 +53,35 @@ a {
   text-align: center;
   padding: 50px 0;
 }
+img.curtain {
+  width: 57px;
+  height: 75px;
+  z-index: 99;
+  display: block;
+}
+img.curtainLeft {
+  position: absolute;
+  left: 0px;
+}
+img.curtainRight {
+  position: absolute;
+  right: 0px;
+}
+.curtain_wrapper {
+  width: 114px;
+  height: 75px;
+  position: relative;
+  overflow: hidden;
+  color: white;
+  background: black;
+}
+.content {
+  position: relative;
+  width: 100px;
+  margin: 0px auto;
+  display: none;
+}
+.thumbs {
+  width: 100px;
+  height: 75px;
+}

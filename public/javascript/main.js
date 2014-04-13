@@ -5,11 +5,48 @@
 
   var cur_video_blob = null;
   var fb_instance;
+  var curtainClosed = true;
+  var vid_counter = 0;
+  var num_vids_entered = 0;
 
   $(document).ready(function(){
     connect_to_chat_firebase();
     connect_webcam();
   });
+
+  function init_curtains(curtain_wrapper, last_msg, video) {
+    var curtain_left = document.createElement("img");
+    curtain_left.src = '../images/frontcurtain.jpg';
+    curtain_left.className = "curtain curtainLeft";
+    var curtain_right = document.createElement("img");
+    curtain_right.src = '../images/frontcurtain.jpg';
+    curtain_right.className = "curtain curtainRight";
+
+    curtain_wrapper.appendChild(curtain_left);
+    curtain_wrapper.appendChild(curtain_right);
+
+    var content = document.createElement("div");
+    content.className = "content";
+    curtain_wrapper.appendChild(content);
+
+    video.className = "thumbs";
+
+    content.appendChild(video);
+
+
+      $(curtain_wrapper).click(function(){
+      if (curtainClosed) {
+        $(this).children('.description').animate({'left': -1*$(this).width()});
+        $(this).children('img.curtain').animate({ width: 8 },{duration: 800});
+        $(this).children('.content').fadeIn(800);
+        curtainClosed = false;
+      } else {
+        curtainClosed = true;
+        $(this).children('img.curtain').animate({ width: 57 },{duration: 800});
+        $(this).children('.content').fadeIn(800);
+      }
+    });
+  }
 
   function connect_to_chat_firebase(){
     /* Include your Firebase link here!*/
@@ -65,8 +102,13 @@
 
   // creates a message node and appends it to the conversation
   function display_msg(data){
-    $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
+    $("#conversation").append("<div class='msg' style='color:"+data.c+"'></div>");
+    var msgs = $(".msg");
+    var last_msg = msgs[msgs.length-1];
+
     if(data.v){
+      display_video(data.v, last_msg);
+      //var tokens = data.m.split(video_char);
       // for video element
       var video = document.createElement("video");
       video.autoplay = true;
@@ -84,8 +126,35 @@
       // var video = document.createElement("img");
       // video.src = URL.createObjectURL(base64_to_blob(data.v));
 
-      document.getElementById("conversation").appendChild(video);
+      //document.getElementById("conversation").appendChild(video);
     }
+  }
+
+  function display_video(base64_data, last_msg) {
+    var video = document.createElement("video");
+
+    vid_counter++;
+    video.setAttribute("id", vid_counter);
+
+    video.autoplay = true;
+    video.controls = false;
+    video.loop = true;
+    video.width = 100;
+    video.className = "display_vid";
+
+    var source = document.createElement("source");
+    source.src =  URL.createObjectURL(base64_to_blob(base64_data));
+    source.type =  "video/webm";
+
+    video.appendChild(source);
+
+    var curtain_wrapper = document.createElement("div");
+    curtain_wrapper.className = "curtain_wrapper";
+
+    last_msg.appendChild(curtain_wrapper);
+
+    init_curtains(curtain_wrapper,last_msg, video);
+
   }
 
   function scroll_to_bottom(wait_time){
