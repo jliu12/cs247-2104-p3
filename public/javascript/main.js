@@ -34,6 +34,7 @@
         $("#type_box").val(value);
       }
     });
+    $("#filmstrip").slideUp(0);
   });
 
   function init_curtains(curtain_wrapper, last_msg, video) {
@@ -267,9 +268,17 @@
 
   function hide_filmstrip() {
     $("#filmstrip").html("");
+    $("#filmstrip").slideUp();
+    $("#submission").removeClass("up");
+    $("#filmstrip_button").removeClass("up");
+    $("#type_box").removeClass("up");
   }
 
   function show_filmstrip() {
+    $("#filmstrip").slideDown();
+    $("#submission").addClass("up");
+    $("#filmstrip_button").addClass("up");
+    $("#type_box").addClass("up");
     copy_video_blobs = cur_video_blobs.slice();
     for (var i = 0; i < copy_video_blobs.length; i ++) {
       append_video(copy_video_blobs[i], i);
