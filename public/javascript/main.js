@@ -17,8 +17,10 @@
     connect_webcam();
     $("#filmstrip_button").click(function() {
       if ($(this).hasClass("down")) {
+        $("#filmstrip").slideToggle();
         hide_filmstrip();
       } else {
+        $("#filmstrip").slideToggle();
         show_filmstrip();
       }
       $(this).toggleClass("down");
@@ -158,6 +160,8 @@
     } else {
       $(last_msg).append(data.m);
     }
+    var convo_div = document.getElementById("conversation");
+    convo_div.scrollTop = convo_div.scrollHeight;
   }
 
   function display_video(base64_data, last_msg) {
