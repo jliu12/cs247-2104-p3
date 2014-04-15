@@ -40,12 +40,13 @@ a {
   -moz-column-count: 8;
   /* Firefox */
   column-count: 8;
+  z-index: 99;
 }
 .filmstrip_vid {
   padding-top: 5px;
 }
 #webcam_stream {
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 10px;
   padding: 0;
@@ -61,7 +62,7 @@ a {
   z-index: 999;
 }
 #conversation {
-  padding: 10px 10px 12%;
+  padding: 10px 10px 15%;
   /* 80px;*/
   height: 80%;
   /*230px;*/
@@ -78,6 +79,7 @@ a {
   right: 0;
   border-top: 2px solid #dcc;
   background: #fff;
+  z-index: 98;
 }
 #submission input {
   border: none;
@@ -101,7 +103,7 @@ a {
 img.curtain {
   width: 57px;
   height: 75px;
-  z-index: 99;
+  z-index: 97;
   display: block;
 }
 img.curtainLeft {

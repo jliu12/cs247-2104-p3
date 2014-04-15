@@ -43,6 +43,7 @@ a {
   -webkit-column-count:8; /* Chrome, Safari, Opera */
   -moz-column-count:8; /* Firefox */
   column-count:8;
+  z-index: 99;
 }
 
 .filmstrip_vid {
@@ -50,7 +51,7 @@ a {
 }
 
 #webcam_stream{
-  position: absolute;
+  position: fixed;
   top: 10px;
   right: 10px;
   padding: 0;
@@ -68,7 +69,7 @@ a {
 }
 
 #conversation{
-  padding: 10px 10px 12%;/* 80px;*/
+  padding: 10px 10px 16%;/* 80px;*/
   height: 80%; /*230px;*/
   overflow-y: scroll;
 }
@@ -85,6 +86,7 @@ a {
   right: 0;
   border-top: 2px solid #dcc;
   background: #fff;
+  z-index:98;
 
   input{
     border: none;
@@ -111,7 +113,7 @@ a {
 img.curtain{
   width:57px; 
   height:75px;
-  z-index:99; 
+  z-index:97; 
   display:block;
 }
 

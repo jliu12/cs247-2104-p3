@@ -283,8 +283,8 @@
       };
       setInterval( function() {
         mediaRecorder.stop();
-        mediaRecorder.start(1500);
-      }, 1500 );
+        mediaRecorder.start(1800);
+      }, 1800 );
       console.log("connect to media stream!");
     }
 
