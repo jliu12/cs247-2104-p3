@@ -9,7 +9,7 @@
   var fb_instance;
   var vid_counter = 0;
   var num_vids_entered = 0;
-  var max_videos = 10;
+  var max_videos = 8;
   var numbers = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
 
   $(document).ready(function(){
