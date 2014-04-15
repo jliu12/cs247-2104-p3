@@ -26,6 +26,7 @@
       $(this).toggleClass("down");
     });
     $("#submission").droppable({
+      hoverClass: "hover_state",
       drop: function(event, ui) {
         //$(ui.draggable).draggable("option", "revert", false);
         var id = $(ui.draggable).attr("id").split("_")[1];

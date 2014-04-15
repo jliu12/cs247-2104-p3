@@ -152,3 +152,6 @@ img.curtainRight {
   height: 5px;
   float: left;
 }
+.hover_state #type_box {
+  background-color: #b3ffb3;
+}
