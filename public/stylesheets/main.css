@@ -58,7 +58,7 @@ a {
   z-index: 999;
 }
 #conversation {
-  padding: 10px 10px 11%;
+  padding: 10px 10px 12%;
   /* 80px;*/
   height: 80%;
   /*230px;*/
@@ -127,4 +127,25 @@ img.curtainRight {
 .thumbs {
   width: 100px;
   height: 75px;
+}
+.vid_number {
+  color: white;
+  width: 120px;
+  text-align: center;
+}
+#vid_numbers {
+  position: fixed;
+  bottom: 5px;
+  width: 100%;
+  left: 0px;
+  -webkit-column-count: 8;
+  /* Chrome, Safari, Opera */
+  -moz-column-count: 8;
+  /* Firefox */
+  column-count: 8;
+}
+.space {
+  width: 25px;
+  height: 5px;
+  float: left;
 }
