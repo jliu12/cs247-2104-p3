@@ -9,7 +9,7 @@ a {
   position: fixed;
   width: 40px;
   right: 2px;
-  top: 78%;
+  bottom: 122px;
 }
 #filmstrip_button {
   background: #ccc;
@@ -35,11 +35,14 @@ a {
   position: fixed;
   bottom: 0px;
   left: 0px;
-  -webkit-column-count: 8;
+  -webkit-column-count: 10;
   /* Chrome, Safari, Opera */
-  -moz-column-count: 8;
+  -moz-column-count: 10;
   /* Firefox */
-  column-count: 8;
+  column-count: 10;
+}
+.filmstrip_vid {
+  padding-top: 18px;
 }
 #webcam_stream {
   position: absolute;
@@ -58,7 +61,7 @@ a {
   z-index: 999;
 }
 #conversation {
-  padding: 10px 10px 11%;
+  padding: 10px 10px 12%;
   /* 80px;*/
   height: 80%;
   /*230px;*/
@@ -69,7 +72,7 @@ a {
 }*/
 #submission {
   position: fixed;
-  height: 22%;
+  height: 170px;
   bottom: 0px;
   width: 100%;
   right: 0;

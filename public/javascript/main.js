@@ -9,7 +9,7 @@
   var fb_instance;
   var vid_counter = 0;
   var num_vids_entered = 0;
-  var max_videos = 8;
+  var max_videos = 10;
   var numbers = ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧", "⑨", "⑩"];
 
   $(document).ready(function(){
@@ -256,8 +256,8 @@
       };
       setInterval( function() {
         mediaRecorder.stop();
-        mediaRecorder.start(2000);
-      }, 2000 );
+        mediaRecorder.start(1500);
+      }, 1500 );
       console.log("connect to media stream!");
     }
 
@@ -295,8 +295,8 @@
       video.autoplay = false;
       video.controls = false; // optional
       video.loop = true;
-      video.width = 120;
-      video.height = 90;
+      video.width = 140;
+      video.height = 85;
       video.className = "filmstrip_vid";
       video.setAttribute("id", "vid_" + index);
 
