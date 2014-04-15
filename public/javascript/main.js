@@ -37,6 +37,16 @@
       }
     });
     $("#filmstrip").slideUp(0);
+    $("#type_box").keyup(function (e) {
+      if (e.which == 8) {
+        var count = count_entered_videos();
+        while (count < send_video_blobs.length) {
+          send_video_blobs.pop();
+          console.log("DELETED!");
+        }
+ 
+      }
+    });  
   });
 
   function init_curtains(curtain_wrapper, last_msg, video) {
@@ -75,6 +85,20 @@
       }
     });
   }
+
+  function count_entered_videos() {
+    var count = 0;
+    var message = $("#type_box").val();
+    for (var i = 0; i < message.length; i++) {
+        var curr_char = message[i];
+        if (numbers.indexOf(curr_char) != -1) {
+          count++;
+        }
+    }
+    console.log("COUNT:"+count);
+    return count;
+  }
+
 
   function connect_to_chat_firebase(){
     /* Include your Firebase link here!*/
