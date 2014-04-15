@@ -17,10 +17,10 @@
     connect_webcam();
     $("#filmstrip_button").click(function() {
       if ($(this).hasClass("down")) {
-        $("#filmstrip").slideToggle();
+        //$("#filmstrip").slideToggle();
         hide_filmstrip();
       } else {
-        $("#filmstrip").slideToggle();
+        //$("#filmstrip").slideToggle();
         show_filmstrip();
       }
       $(this).toggleClass("down");
@@ -123,6 +123,8 @@
         $(this).val("");
         scroll_to_bottom(0);
         send_video_blobs = [];
+        $("#filmstrip_button").removeClass("down");
+        hide_filmstrip();
       }
     });
 
@@ -271,7 +273,11 @@
   }
 
   function hide_filmstrip() {
-    $("#filmstrip").html("");
+    //for (var i = 0; i < 8; i++) {
+    //  $("#vid_"+i).hide();
+    //}
+    $("#vid_numbers").html("");
+    $("#film").html("");
     $("#filmstrip").slideUp();
     $("#submission").removeClass("up");
     $("#filmstrip_button").removeClass("up");
@@ -326,11 +332,17 @@
         }*/
       });
 
+      //$("#vid_"+index).show();
+
+      var temp = index+1;
+
+      $("#vid_numbers").append("<div class='vid_number'>"+temp+"</div>");
+
       // for gif instead, use this code below and change mediaRecorder.mimeType in onMediaSuccess below
       // var video = document.createElement("img");
       // video.src = URL.createObjectURL(base64_to_blob(data.v));
 
-      var film_strip = document.getElementById('filmstrip');
+      var film_strip = document.getElementById('film');
       film_strip.appendChild(video);
   }
 
